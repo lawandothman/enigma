@@ -15,6 +15,8 @@ mod lexer_tests {
 			};
 
 			let result = add(five, ten);
+            !-/*5;
+            5 < 10 > 5;
 		";
 
         let tests = [
@@ -53,6 +55,18 @@ mod lexer_tests {
             (TokenKind::Comma, ","),
             (TokenKind::Ident, "ten"),
             (TokenKind::Rparen, ")"),
+            (TokenKind::Semicolon, ";"),
+            (TokenKind::Bang, "!"),
+            (TokenKind::Minus, "-"),
+            (TokenKind::Slash, "/"),
+            (TokenKind::Asterisk, "*"),
+            (TokenKind::Int, "5"),
+            (TokenKind::Semicolon, ";"),
+            (TokenKind::Int, "5"),
+            (TokenKind::Lt, "<"),
+            (TokenKind::Int, "10"),
+            (TokenKind::Gt, ">"),
+            (TokenKind::Int, "5"),
             (TokenKind::Semicolon, ";"),
             (TokenKind::Eof, ""),
         ];

@@ -25,11 +25,17 @@ impl Lexer {
         self.skip_whitespace();
         let tok = match self.ch {
             '=' => new_token(TokenKind::Assign, self.ch),
+            '+' => new_token(TokenKind::Plus, self.ch),
+            '-' => new_token(TokenKind::Minus, self.ch),
+            '!' => new_token(TokenKind::Bang, self.ch),
+            '/' => new_token(TokenKind::Slash, self.ch),
+            '*' => new_token(TokenKind::Asterisk, self.ch),
+            '<' => new_token(TokenKind::Lt, self.ch),
+            '>' => new_token(TokenKind::Gt, self.ch),
             ';' => new_token(TokenKind::Semicolon, self.ch),
             '(' => new_token(TokenKind::Lparen, self.ch),
             ')' => new_token(TokenKind::Rparen, self.ch),
             ',' => new_token(TokenKind::Comma, self.ch),
-            '+' => new_token(TokenKind::Plus, self.ch),
             '{' => new_token(TokenKind::Lbrace, self.ch),
             '}' => new_token(TokenKind::Rbrace, self.ch),
             '\u{0}' => Token {

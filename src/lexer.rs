@@ -1,4 +1,4 @@
-use crate::token::{Token, TokenKind};
+use crate::token::{self, Token, TokenKind};
 
 pub struct Lexer {
     input: String,
@@ -22,6 +22,7 @@ impl Lexer {
     }
 
     pub fn next_token(&mut self) -> Token {
+        self.skip_whitespace();
         let tok = match self.ch {
             '=' => new_token(TokenKind::Assign, self.ch),
             ';' => new_token(TokenKind::Semicolon, self.ch),
@@ -35,7 +36,26 @@ impl Lexer {
                 kind: TokenKind::Eof,
                 literal: "".to_owned(),
             },
-            _ => new_token(TokenKind::Illegal, self.ch),
+            _ => {
+                if is_letter(self.ch) {
+                    let literal = self.read_identifier();
+                    let kind = token::lookup_ident(literal);
+                    return Token {
+                        kind,
+                        literal: literal.to_owned(),
+                    };
+                } else if is_digit(self.ch) {
+                    return Token {
+                        kind: TokenKind::Int,
+                        literal: self.read_number().to_owned(),
+                    };
+                } else {
+                    Token {
+                        kind: TokenKind::Illegal,
+                        literal: "".to_owned(),
+                    }
+                }
+            }
         };
         self.read_char();
         tok
@@ -50,10 +70,40 @@ impl Lexer {
         self.position = self.read_position;
         self.read_position += 1;
     }
+
+    fn read_identifier(&mut self) -> &str {
+        let position = self.position;
+        while is_letter(self.ch) {
+            self.read_char();
+        }
+        &self.input[position..self.position]
+    }
+
+    fn skip_whitespace(&mut self) {
+        while self.ch == ' ' || self.ch == '\t' || self.ch == '\n' || self.ch == '\r' {
+            self.read_char()
+        }
+    }
+
+    fn read_number(&mut self) -> &str {
+        let position = self.position;
+        while is_digit(self.ch) {
+            self.read_char()
+        }
+        &self.input[position..self.position]
+    }
 }
 fn new_token(kind: TokenKind, ch: char) -> Token {
     Token {
         kind,
         literal: ch.to_string(),
     }
+}
+
+fn is_letter(ch: char) -> bool {
+    'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+}
+
+fn is_digit(ch: char) -> bool {
+    '0' <= ch && ch <= '9'
 }

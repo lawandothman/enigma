@@ -28,3 +28,15 @@ pub struct Token {
     pub kind: TokenKind,
     pub literal: String,
 }
+
+pub fn lookup_ident(ident: &str) -> TokenKind {
+    keyword_to_token_kind(ident).unwrap_or(TokenKind::Ident)
+}
+
+fn keyword_to_token_kind(keyword: &str) -> Option<TokenKind> {
+    match keyword {
+        "fn" => Some(TokenKind::Function),
+        "let" => Some(TokenKind::Let),
+        _ => None,
+    }
+}

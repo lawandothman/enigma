@@ -6,17 +6,55 @@ mod lexer_tests {
 
     #[test]
     fn next_token() {
-        let input = "=+(){},;";
+        let input = "
+			let five = 5;
+			let ten = 10;
+
+			let add = fn(x,y) {
+				x + y;
+			};
+
+			let result = add(five, ten);
+		";
 
         let tests = [
+            (TokenKind::Let, "let"),
+            (TokenKind::Ident, "five"),
             (TokenKind::Assign, "="),
-            (TokenKind::Plus, "+"),
+            (TokenKind::Int, "5"),
+            (TokenKind::Semicolon, ";"),
+            (TokenKind::Let, "let"),
+            (TokenKind::Ident, "ten"),
+            (TokenKind::Assign, "="),
+            (TokenKind::Int, "10"),
+            (TokenKind::Semicolon, ";"),
+            (TokenKind::Let, "let"),
+            (TokenKind::Ident, "add"),
+            (TokenKind::Assign, "="),
+            (TokenKind::Function, "fn"),
             (TokenKind::Lparen, "("),
+            (TokenKind::Ident, "x"),
+            (TokenKind::Comma, ","),
+            (TokenKind::Ident, "y"),
             (TokenKind::Rparen, ")"),
             (TokenKind::Lbrace, "{"),
-            (TokenKind::Rbrace, "}"),
-            (TokenKind::Comma, ","),
+            (TokenKind::Ident, "x"),
+            (TokenKind::Plus, "+"),
+            (TokenKind::Ident, "y"),
             (TokenKind::Semicolon, ";"),
+            (TokenKind::Rbrace, "}"),
+            (TokenKind::Semicolon, ";"),
+            (TokenKind::Let, "let"),
+            (TokenKind::Ident, "result"),
+            (TokenKind::Assign, "="),
+            (TokenKind::Ident, "add"),
+            (TokenKind::Lparen, "("),
+            (TokenKind::Ident, "five"),
+            (TokenKind::Comma, ","),
+            (TokenKind::Ident, "ten"),
+            (TokenKind::Rparen, ")"),
+            (TokenKind::Semicolon, ";"),
+            (TokenKind::Eof, ""),
         ];
 
         let mut lexer = Lexer::new(input);

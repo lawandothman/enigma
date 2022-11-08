@@ -21,31 +21,27 @@ impl Lexer {
         lexer
     }
 
-    pub fn next_token(self: &mut Self) -> Token {
-        let tok: Token;
-
-        match self.ch {
-            '=' => tok = new_token(TokenKind::Assign, self.ch),
-            ';' => tok = new_token(TokenKind::Semicolon, self.ch),
-            '(' => tok = new_token(TokenKind::Lparen, self.ch),
-            ')' => tok = new_token(TokenKind::Rparen, self.ch),
-            ',' => tok = new_token(TokenKind::Comma, self.ch),
-            '+' => tok = new_token(TokenKind::Plus, self.ch),
-            '{' => tok = new_token(TokenKind::Lbrace, self.ch),
-            '}' => tok = new_token(TokenKind::Rbrace, self.ch),
-            '\u{0}' => {
-                tok = Token {
-                    kind: TokenKind::Eof,
-                    literal: "".to_owned(),
-                }
-            }
-            _ => tok = new_token(TokenKind::Illegal, self.ch),
-        }
+    pub fn next_token(&mut self) -> Token {
+        let tok = match self.ch {
+            '=' => new_token(TokenKind::Assign, self.ch),
+            ';' => new_token(TokenKind::Semicolon, self.ch),
+            '(' => new_token(TokenKind::Lparen, self.ch),
+            ')' => new_token(TokenKind::Rparen, self.ch),
+            ',' => new_token(TokenKind::Comma, self.ch),
+            '+' => new_token(TokenKind::Plus, self.ch),
+            '{' => new_token(TokenKind::Lbrace, self.ch),
+            '}' => new_token(TokenKind::Rbrace, self.ch),
+            '\u{0}' => Token {
+                kind: TokenKind::Eof,
+                literal: "".to_owned(),
+            },
+            _ => new_token(TokenKind::Illegal, self.ch),
+        };
         self.read_char();
         tok
     }
 
-    fn read_char(self: &mut Self) {
+    fn read_char(&mut self) {
         self.ch = self
             .input
             .chars()

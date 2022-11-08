@@ -39,6 +39,7 @@ pub enum TokenKind {
     Else,
     Return,
 }
+#[derive(Debug)]
 pub struct Token {
     pub kind: TokenKind,
     pub literal: String,

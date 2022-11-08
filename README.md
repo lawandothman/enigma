@@ -1,6 +1,6 @@
 # Enigma
 
-An interpreter built in Go for the Enigma programming language.
+An interpreter built in Rust for the Enigma programming language.
 
 The Enigma Programming Language has the following features:
 

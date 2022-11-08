@@ -1,4 +1,4 @@
-use crate::token::{self, Token, TokenKind};
+use crate::token::{self, Token};
 
 pub struct Lexer {
     input: String,
@@ -28,57 +28,38 @@ impl Lexer {
             '=' => match self.peek_char() {
                 '=' => {
                     self.read_char();
-                    Token {
-                        kind: TokenKind::Eq,
-                        literal: "==".to_owned(),
-                    }
+                    Token::Eq
                 }
-                _ => new_token(TokenKind::Assign, self.ch),
+                _ => Token::Assign,
             },
-            '+' => new_token(TokenKind::Plus, self.ch),
-            '-' => new_token(TokenKind::Minus, self.ch),
+            '+' => Token::Plus,
+            '-' => Token::Minus,
             '!' => match self.peek_char() {
                 '=' => {
                     self.read_char();
-                    Token {
-                        kind: TokenKind::NotEq,
-                        literal: "!=".to_owned(),
-                    }
+                    Token::NotEq
                 }
-                _ => new_token(TokenKind::Bang, self.ch),
+                _ => Token::Bang,
             },
-            '/' => new_token(TokenKind::Slash, self.ch),
-            '*' => new_token(TokenKind::Asterisk, self.ch),
-            '<' => new_token(TokenKind::Lt, self.ch),
-            '>' => new_token(TokenKind::Gt, self.ch),
-            ';' => new_token(TokenKind::Semicolon, self.ch),
-            '(' => new_token(TokenKind::Lparen, self.ch),
-            ')' => new_token(TokenKind::Rparen, self.ch),
-            ',' => new_token(TokenKind::Comma, self.ch),
-            '{' => new_token(TokenKind::Lbrace, self.ch),
-            '}' => new_token(TokenKind::Rbrace, self.ch),
-            '\u{0}' => Token {
-                kind: TokenKind::Eof,
-                literal: "".to_owned(),
-            },
+            '/' => Token::Slash,
+            '*' => Token::Asterisk,
+            '<' => Token::Lt,
+            '>' => Token::Gt,
+            '(' => Token::Lparen,
+            ')' => Token::Rparen,
+            ',' => Token::Comma,
+            '{' => Token::Lbrace,
+            '}' => Token::Rbrace,
+            ';' => Token::Semicolon,
+            '\u{0}' => Token::Eof,
             _ => {
                 if is_letter(self.ch) {
                     let literal = self.read_identifier();
-                    let kind = token::lookup_ident(literal);
-                    return Token {
-                        kind,
-                        literal: literal.to_owned(),
-                    };
+                    return token::lookup_ident(literal);
                 } else if is_digit(self.ch) {
-                    return Token {
-                        kind: TokenKind::Int,
-                        literal: self.read_number().to_owned(),
-                    };
+                    return Token::Int(self.read_number().to_owned());
                 } else {
-                    Token {
-                        kind: TokenKind::Illegal,
-                        literal: "".to_owned(),
-                    }
+                    Token::Illegal
                 }
             }
         };
@@ -123,12 +104,6 @@ impl Lexer {
             .chars()
             .nth(self.read_position)
             .unwrap_or('\u{0}')
-    }
-}
-fn new_token(kind: TokenKind, ch: char) -> Token {
-    Token {
-        kind,
-        literal: ch.to_string(),
     }
 }
 

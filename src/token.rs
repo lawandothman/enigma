@@ -30,6 +30,11 @@ pub enum TokenKind {
     // Keywords
     Function,
     Let,
+    True,
+    False,
+    If,
+    Else,
+    Return,
 }
 pub struct Token {
     pub kind: TokenKind,
@@ -44,6 +49,11 @@ fn keyword_to_token_kind(keyword: &str) -> Option<TokenKind> {
     match keyword {
         "fn" => Some(TokenKind::Function),
         "let" => Some(TokenKind::Let),
+        "true" => Some(TokenKind::True),
+        "false" => Some(TokenKind::False),
+        "if" => Some(TokenKind::If),
+        "else" => Some(TokenKind::Else),
+        "return" => Some(TokenKind::Return),
         _ => None,
     }
 }

@@ -23,11 +23,30 @@ impl Lexer {
 
     pub fn next_token(&mut self) -> Token {
         self.skip_whitespace();
+
         let tok = match self.ch {
-            '=' => new_token(TokenKind::Assign, self.ch),
+            '=' => match self.peek_char() {
+                '=' => {
+                    self.read_char();
+                    Token {
+                        kind: TokenKind::Eq,
+                        literal: "==".to_owned(),
+                    }
+                }
+                _ => new_token(TokenKind::Assign, self.ch),
+            },
             '+' => new_token(TokenKind::Plus, self.ch),
             '-' => new_token(TokenKind::Minus, self.ch),
-            '!' => new_token(TokenKind::Bang, self.ch),
+            '!' => match self.peek_char() {
+                '=' => {
+                    self.read_char();
+                    Token {
+                        kind: TokenKind::NotEq,
+                        literal: "!=".to_owned(),
+                    }
+                }
+                _ => new_token(TokenKind::Bang, self.ch),
+            },
             '/' => new_token(TokenKind::Slash, self.ch),
             '*' => new_token(TokenKind::Asterisk, self.ch),
             '<' => new_token(TokenKind::Lt, self.ch),
@@ -97,6 +116,13 @@ impl Lexer {
             self.read_char()
         }
         &self.input[position..self.position]
+    }
+
+    fn peek_char(&self) -> char {
+        self.input
+            .chars()
+            .nth(self.read_position)
+            .unwrap_or('\u{0}')
     }
 }
 fn new_token(kind: TokenKind, ch: char) -> Token {

@@ -18,6 +18,9 @@ pub enum TokenKind {
     Lt,
     Gt,
 
+    Eq,
+    NotEq,
+
     // Delimiters
     Comma,
     Semicolon,

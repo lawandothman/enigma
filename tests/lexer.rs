@@ -23,6 +23,9 @@ mod lexer_tests {
             } else {
                 return false;
             }
+
+            10 == 10;
+            10 != 9;
 		";
 
         let tests = [
@@ -91,6 +94,14 @@ mod lexer_tests {
             (TokenKind::False, "false"),
             (TokenKind::Semicolon, ";"),
             (TokenKind::Rbrace, "}"),
+            (TokenKind::Int, "10"),
+            (TokenKind::Eq, "=="),
+            (TokenKind::Int, "10"),
+            (TokenKind::Semicolon, ";"),
+            (TokenKind::Int, "10"),
+            (TokenKind::NotEq, "!="),
+            (TokenKind::Int, "9"),
+            (TokenKind::Semicolon, ";"),
             (TokenKind::Eof, ""),
         ];
 

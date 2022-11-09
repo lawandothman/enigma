@@ -6,6 +6,7 @@ use crate::{
 
 pub struct Parser {
     lexer: Lexer,
+    pub errors: Vec<String>,
     cur_token: Token,
     peek_token: Token,
 }
@@ -14,6 +15,7 @@ impl Parser {
     pub fn new(lexer: Lexer) -> Self {
         let mut p = Self {
             lexer,
+            errors: vec![],
             cur_token: Token::Illegal,
             peek_token: Token::Illegal,
         };
@@ -55,6 +57,7 @@ impl Parser {
                 name = ident;
             }
             _ => {
+                self.peek_error(&Token::Ident("identifier".to_string()));
                 return None;
             }
         }
@@ -70,17 +73,25 @@ impl Parser {
         Some(Statement::Let(name))
     }
 
-    fn peek_token_is(&self, t: Token) -> bool {
-        self.peek_token == t
-    }
-
     fn expect_peek(&mut self, t: Token) -> bool {
-        match self.peek_token_is(t) {
+        match self.peek_token == t {
             true => {
                 self.next_token();
-                true
+                return true;
             }
-            false => false,
+            false => {
+                self.peek_error(&t);
+                return false;
+            }
         }
+    }
+
+    fn peek_error(&mut self, t: &Token) {
+        println!("Error error");
+        let msg = format!(
+            "expected next token to be {}, got {} instead",
+            t, self.peek_token
+        );
+        self.errors.push(msg);
     }
 }

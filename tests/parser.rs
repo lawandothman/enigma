@@ -24,6 +24,19 @@ mod parser_tests {
                 Statement::Let("y".to_string()),
                 Statement::Let("foobar".to_string())
             ]
-        )
+        );
+    }
+    #[test]
+    fn test_errors() {
+        let input = "
+			let x = 5;
+			let y = 10;
+			let 838383;
+		";
+
+        let lexer = Lexer::new(input);
+        let parser = Parser::new(lexer);
+
+        assert_eq!(parser.errors.len(), 0, "parser errors: {:?}", parser.errors);
     }
 }

@@ -45,6 +45,7 @@ impl Parser {
     fn parse_statement(&mut self) -> Option<Statement> {
         match self.cur_token {
             Token::Let => self.parse_let_statement(),
+            Token::Return => self.parse_return_statement(),
             _ => None,
         }
     }
@@ -70,6 +71,14 @@ impl Parser {
         }
 
         Some(Statement::Let(name))
+    }
+
+    fn parse_return_statement(&mut self) -> Option<Statement> {
+        self.next_token();
+        while self.cur_token != Token::Semicolon {
+            self.next_token();
+        }
+        Some(Statement::Return)
     }
 
     fn expect_peek(&mut self, t: Token) -> bool {

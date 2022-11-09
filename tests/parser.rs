@@ -39,4 +39,26 @@ mod parser_tests {
 
         assert_eq!(parser.errors.len(), 0, "parser errors: {:?}", parser.errors);
     }
+    #[test]
+    fn test_return_statement() {
+        let input = "
+			let x = 5;
+			let y = 10;
+			return 20;
+		";
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+
+        let program = parser.parse_program();
+
+        assert_eq!(
+            program.statements,
+            vec![
+                Statement::Let("x".to_string()),
+                Statement::Let("y".to_string()),
+                Statement::Return
+            ]
+        );
+    }
 }

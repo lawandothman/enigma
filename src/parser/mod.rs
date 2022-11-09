@@ -50,17 +50,16 @@ impl Parser {
     }
 
     fn parse_let_statement(&mut self) -> Option<Statement> {
-        let name;
-        match self.peek_token.clone() {
+        let name = match self.peek_token.clone() {
             Token::Ident(ident) => {
                 self.next_token();
-                name = ident;
+                ident
             }
             _ => {
                 self.peek_error(&Token::Ident("identifier".to_string()));
                 return None;
             }
-        }
+        };
 
         if !self.expect_peek(Token::Assign) {
             return None;
@@ -77,11 +76,11 @@ impl Parser {
         match self.peek_token == t {
             true => {
                 self.next_token();
-                return true;
+                true
             }
             false => {
                 self.peek_error(&t);
-                return false;
+                false
             }
         }
     }
